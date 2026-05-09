@@ -200,7 +200,7 @@ export default function History() {
         {/* ── Quick stats bar ── */}
         {!isLoading && scans.length > 0 && (
           <div
-            className="mt-8 grid grid-cols-3 gap-3"
+            className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3"
             data-history-content
           >
             <div className="rounded-2xl border border-black/8 bg-white px-5 py-4">
@@ -370,7 +370,7 @@ export default function History() {
 
             <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
               {/* ── Scan list ── */}
-              <div className="grid gap-2.5 lg:max-h-[75vh] lg:overflow-auto lg:pr-2">
+              <div className={`grid gap-2.5 lg:max-h-[75vh] lg:overflow-auto lg:pr-2 ${selectedScan ? "hidden lg:grid" : ""}`}>
                 {filteredScans.length === 0 && (
                   <div className="rounded-2xl border border-black/8 bg-white p-6 text-center">
                     <p className="text-sm text-[#6F6F6F]">
@@ -461,6 +461,14 @@ export default function History() {
               {/* ── Detail panel ── */}
               {selectedScan && (
                 <div className="lg:sticky lg:top-24 lg:max-h-[85vh] lg:overflow-auto">
+                  <button
+                    className="mb-4 flex items-center gap-2 text-sm font-medium text-[#6F6F6F] transition hover:text-black lg:hidden"
+                    onClick={() => setSelectedScan(null)}
+                    type="button"
+                  >
+                    <ChevronLeft aria-hidden="true" className="h-4 w-4" />
+                    Back to scan list
+                  </button>
                   <AnalysisResult
                     analysis={selectedScan.rawAnalysis || selectedScan}
                     scan={selectedScan}
