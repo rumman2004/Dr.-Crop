@@ -40,6 +40,13 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
+app.get("/", (_req, res) => {
+  res.json({
+    success: true,
+    message: "Dr. Crop API is running successfully.",
+  });
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({
     success: true,
