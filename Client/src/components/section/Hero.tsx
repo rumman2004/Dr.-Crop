@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ArrowRight, Download, Leaf, ScanLine } from "lucide-react";
 
 /* ── Update this URL after each EAS build ── */
-const APK_DOWNLOAD_URL = "https://expo.dev/artifacts/eas/gnDW8pP3P6QFesrWSjSewa.apk";
+const APK_DOWNLOAD_URL = "https://drive.google.com/uc?export=download&id=18VqSEamLpBba963Q3TwUU6MZP3k1fjQw&confirm=true";
 
 const VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4";
