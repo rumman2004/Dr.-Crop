@@ -12,6 +12,12 @@ const treatmentSchema = new mongoose.Schema(
 
 const scanHistorySchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
     imageUrl: String,
     imagePublicId: String,
     cropName: {

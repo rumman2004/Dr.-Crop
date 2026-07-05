@@ -1,16 +1,27 @@
-import express from "express";
+import { Router } from "express";
+import multer from "multer";
 
 import {
   analyzeCrop,
+  deleteScan,
   getScanById,
   getScanHistory,
-} from "../controller/uploadController.js";
-import uploadCropImage from "../middleware/uploadMiddleware.js";
+} from "../controller/scanController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 6 * 1024 * 1024 },
+});
 
-router.post("/analyze", uploadCropImage.single("image"), analyzeCrop);
+const router = Router();
+
+/* All scan routes require authentication */
+router.use(protect);
+
+router.post("/analyze", upload.single("image"), analyzeCrop);
 router.get("/history", getScanHistory);
 router.get("/:id", getScanById);
+router.delete("/:id", deleteScan);
 
 export default router;

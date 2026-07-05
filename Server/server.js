@@ -7,7 +7,10 @@ import morgan from "morgan";
 
 import connectDB from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
+import authRoutes from "./routes/authRoutes.js";
+import journalRoutes from "./routes/journalRoutes.js";
 import scanRoutes from "./routes/scanRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,15 +40,12 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
+
+// Mount stripe routes BEFORE express.json() so webhook can get raw body
+app.use("/api/stripe", stripeRoutes);
+
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
-
-app.get("/", (_req, res) => {
-  res.json({
-    success: true,
-    message: "Dr. Crop API is running successfully.",
-  });
-});
 
 app.get("/api/health", (_req, res) => {
   res.json({
@@ -55,6 +55,8 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
+app.use("/api/auth", authRoutes);
+app.use("/api/journals", journalRoutes);
 app.use("/api/scans", scanRoutes);
 
 app.use(notFound);

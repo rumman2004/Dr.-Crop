@@ -21,6 +21,7 @@ import { fetchScanHistory } from "../api/cropApi";
 import AnalysisResult from "../components/analysis/AnalysisResult";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
+import { useAuth } from "../context/AuthContext";
 
 /* ── Date formatter ── */
 const formatDate = (value) =>
@@ -63,6 +64,7 @@ export default function History() {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const pageRef = useRef(null);
+  const { token, loading: authLoading } = useAuth();
 
   const loadHistory = async () => {
     setIsLoading(true);
@@ -154,6 +156,27 @@ export default function History() {
     scans.map((s) => s.cropName).filter(Boolean),
   ).size;
 
+  if (!token) {
+    return (
+      <section className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-[#F7F7F4] px-8 py-16" ref={pageRef}>
+        <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-sm ring-1 ring-black/5">
+          <h1 className="font-display text-4xl tracking-tight text-black">Sign in required</h1>
+          <p className="mt-4 text-sm leading-7 text-[#6F6F6F]">
+            You must be logged in to view your scan history.
+          </p>
+          <div className="mt-8 flex justify-center gap-4">
+            <Link to="/login" className="inline-flex h-12 items-center justify-center rounded-full bg-black px-6 text-sm font-medium text-white transition hover:bg-black/90">
+              Sign in
+            </Link>
+            <Link to="/signup" className="inline-flex h-12 items-center justify-center rounded-full border border-black/10 bg-white px-6 text-sm font-medium text-black transition hover:border-black hover:bg-[#F7F7F4]">
+              Create account
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="min-h-screen bg-[#F7F7F4] px-6 py-12 sm:px-8" ref={pageRef}>
       <div className="mx-auto max-w-7xl">
@@ -200,7 +223,7 @@ export default function History() {
         {/* ── Quick stats bar ── */}
         {!isLoading && scans.length > 0 && (
           <div
-            className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3"
+            className="mt-8 grid grid-cols-3 gap-3"
             data-history-content
           >
             <div className="rounded-2xl border border-black/8 bg-white px-5 py-4">
@@ -370,7 +393,7 @@ export default function History() {
 
             <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
               {/* ── Scan list ── */}
-              <div className={`grid gap-2.5 lg:max-h-[75vh] lg:overflow-auto lg:pr-2 ${selectedScan ? "hidden lg:grid" : ""}`}>
+              <div className="grid gap-2.5 lg:max-h-[75vh] lg:overflow-auto lg:pr-2">
                 {filteredScans.length === 0 && (
                   <div className="rounded-2xl border border-black/8 bg-white p-6 text-center">
                     <p className="text-sm text-[#6F6F6F]">
@@ -461,14 +484,6 @@ export default function History() {
               {/* ── Detail panel ── */}
               {selectedScan && (
                 <div className="lg:sticky lg:top-24 lg:max-h-[85vh] lg:overflow-auto">
-                  <button
-                    className="mb-4 flex items-center gap-2 text-sm font-medium text-[#6F6F6F] transition hover:text-black lg:hidden"
-                    onClick={() => setSelectedScan(null)}
-                    type="button"
-                  >
-                    <ChevronLeft aria-hidden="true" className="h-4 w-4" />
-                    Back to scan list
-                  </button>
                   <AnalysisResult
                     analysis={selectedScan.rawAnalysis || selectedScan}
                     scan={selectedScan}

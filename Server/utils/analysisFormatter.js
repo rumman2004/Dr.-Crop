@@ -126,3 +126,38 @@ export const mergeAnalysis = (baseAnalysis, refinement) => {
     },
   };
 };
+
+export const mergeEnsembleAnalyses = (analyses) => {
+  if (!analyses || analyses.length === 0) return normalizeAnalysis({});
+  
+  const base = normalizeAnalysis(analyses[0]);
+  
+  for (let i = 1; i < analyses.length; i++) {
+    const next = normalizeAnalysis(analyses[i]);
+    
+    if (base.cropName === "Unknown crop" && next.cropName !== "Unknown crop") {
+      base.cropName = next.cropName;
+    }
+    if (base.diseaseName === "Unknown condition" && next.diseaseName !== "Unknown condition") {
+      base.diseaseName = next.diseaseName;
+    }
+    if (base.confidence === "Unknown" || base.confidence === "Low") {
+      if (next.confidence === "High" || next.confidence === "Medium") {
+        base.confidence = next.confidence;
+      }
+    }
+
+    base.symptoms = [...new Set([...base.symptoms, ...next.symptoms])];
+    base.causes = [...new Set([...base.causes, ...next.causes])];
+    base.prevention = [...new Set([...base.prevention, ...next.prevention])];
+    base.nextSteps = [...new Set([...base.nextSteps, ...next.nextSteps])];
+    
+    base.treatment.immediate = [...new Set([...base.treatment.immediate, ...next.treatment.immediate])];
+    base.treatment.organic = [...new Set([...base.treatment.organic, ...next.treatment.organic])];
+    base.treatment.chemical = [...new Set([...base.treatment.chemical, ...next.treatment.chemical])];
+    base.treatment.cultural = [...new Set([...base.treatment.cultural, ...next.treatment.cultural])];
+  }
+  
+  return base;
+};
+

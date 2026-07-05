@@ -18,6 +18,7 @@ import {
 import { Link } from "react-router-dom";
 
 import ImageUploadModal from "../components/ui/ImageUploadModal";
+import { useAuth } from "../context/AuthContext";
 
 /* ── What the report includes ── */
 const reportSections = [
@@ -54,6 +55,7 @@ const formats = ["JPG", "PNG", "WEBP"];
 
 export default function Studio() {
   const pageRef = useRef(null);
+  const { token } = useAuth();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -201,7 +203,25 @@ export default function Studio() {
 
           {/* ── Right side: Upload area ── */}
           <div data-studio-upload>
-            <ImageUploadModal />
+            {!token ? (
+              <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-[2rem] border border-black/10 bg-[#F7F7F4] p-8 text-center">
+                <Shield aria-hidden="true" className="h-12 w-12 text-black/20" />
+                <h3 className="font-display mt-6 text-2xl text-black">Sign in to start scanning</h3>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-[#6F6F6F]">
+                  Join Dr. Crop to analyze your plant images and save your diagnostic history securely.
+                </p>
+                <div className="mt-8 flex gap-3">
+                  <Link to="/login" className="inline-flex h-11 items-center justify-center rounded-full bg-black px-6 text-sm font-medium text-white transition hover:bg-black/90">
+                    Sign in
+                  </Link>
+                  <Link to="/signup" className="inline-flex h-11 items-center justify-center rounded-full border border-black/10 bg-white px-6 text-sm font-medium text-black transition hover:border-black hover:bg-[#F7F7F4]">
+                    Create account
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <ImageUploadModal />
+            )}
           </div>
         </div>
       </div>

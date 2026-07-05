@@ -2,11 +2,13 @@ import { ImageUp, Loader2, RotateCcw, UploadCloud, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { analyzeCropImage } from "../../api/cropApi";
+import { useAuth } from "../../context/AuthContext";
 import AnalysisResult from "../analysis/AnalysisResult";
 import Button from "./Button";
 import Card from "./Card";
 
 export default function ImageUploadModal({ onComplete }) {
+  const { user, updateUser } = useAuth();
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
@@ -63,6 +65,9 @@ export default function ImageUploadModal({ onComplete }) {
     try {
       const response = await analyzeCropImage(file);
       setResult(response);
+      if (updateUser && user) {
+        updateUser({ credits: user.credits - 1 });
+      }
       onComplete?.(response);
     } catch (requestError) {
       setError(requestError.message);
