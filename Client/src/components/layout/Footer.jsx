@@ -29,10 +29,15 @@ export default function Footer() {
 
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.24em] text-black">
-            Contact
+            Company
           </h3>
+          <div className="mt-4 grid gap-3 text-sm text-[#6F6F6F]">
+            <Link to="/support">Support</Link>
+            <Link to="/terms">Terms &amp; Conditions</Link>
+            <Link to="/pricing">Pricing</Link>
+          </div>
           <Link
-            className="mt-4 inline-flex items-center gap-2 rounded-full border border-black/10 px-5 py-3 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-black/10 px-5 py-3 text-sm font-medium text-black transition hover:border-black hover:bg-black hover:text-white"
             to="/reach"
           >
             Reach Us

@@ -13,6 +13,8 @@ import Studio from "./pages/Studio";
 import Pricing from "./pages/Pricing";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
+import Terms from "./pages/Terms";
+import Support from "./pages/Support";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="payment-success" element={<PaymentSuccess />} />
           <Route path="payment-cancel" element={<PaymentCancel />} />
+          <Route path="terms" element={<Terms />} />
+          <Route path="support" element={<Support />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
