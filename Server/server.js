@@ -47,6 +47,16 @@ app.use("/api/stripe", stripeRoutes);
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
+app.get("/", (_req, res) => {
+  res.json({
+    success: true,
+    service: "Dr. Crop API",
+    message:
+      "This is the Dr. Crop API server. Visit the web app instead — API routes live under /api.",
+    health: "/api/health",
+  });
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({
     success: true,
